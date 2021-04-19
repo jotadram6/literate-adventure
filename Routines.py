@@ -91,6 +91,12 @@ def getText(filename):#
         fullText.append(para.text)
     return '\n'.join(fullText)
 
+def sumador(Dicc):      
+    #INPUT: Recibe el diccionario que devuelve contador
+    #OUTPUT: diccionario con el total de conteos por afectación. 
+    total = {k:np.sum(v) for (k,v) in Dicc.items()}
+    return total
+
 #########
 
 if __name__ == '__main__':
@@ -116,8 +122,11 @@ if __name__ == '__main__':
         print Freqs
 
 
-    Afects=DictsBuild('DiccionariosVersionDic1_2020.csv',Debug=False)
-    ResultadoTexto1=contador(Texto1.replace(u"a",Afects[u'Proyecto de vida'][6]),Afects)
-    print ResultadoTexto1
-    ResultadoTexto2=contador(Texto2.replace(u"a",Afects[u'Socioculturales'][4]),Afects)
-    print ResultadoTexto2
+Afects=DictsBuild('DiccionariosVersionDic1_2020.csv',Debug=False)
+ResultadoTexto1=contador(Texto1.replace("a",Afects['Proyecto de vida'][6]),Afects)
+print("Conteo del texto 1: \n", ResultadoTexto1)
+print("Total del conteo texto 1: \n", sumador(ResultadoTexto1),"\n")
+
+ResultadoTexto2=contador(Texto2.replace("a",Afects['Socioculturales'][4]),Afects)
+print("Conteo del texto 2: \n: ",ResultadoTexto2)
+print("Total del conteo del texto 2: \n",sumador(ResultadoTexto2))
