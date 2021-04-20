@@ -56,7 +56,7 @@ def DictsBuild(CSVFile,Debug=False):
     #df = pandas.read_csv('DiccionariosVersionDic1_2020.csv')
     df = pandas.read_csv(CSVFile)
 
-    ListaDeAfectaciones = [7,8,9,10,11,13,14,15,16,17,18,19,20]
+    ListaDeAfectaciones = [7,8,9,10,11,12,13,14,15,16,17,18,19,20]
     Afectaciones = {}
     StringDeUso='Sinónimos-Palabras'
     if Debug:
