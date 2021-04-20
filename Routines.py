@@ -31,7 +31,7 @@ def PreparacionTexto(Texto,SignosPuntuacion,StopWords=stop_words,Stemmer=spanish
 #########
 
 def CountingFunction(Text,Pattern):
-    if type(Text) is not list and type(Text) is not np.ndarray and type(Text) is not str and type(Text) is not unicode:
+    if type(Text) is not list and type(Text) is not np.ndarray and type(Text) is not str:
         print ("Bad usage of this function: CountingFunction(Arr,Pat) Arr: must be a list or an array or string, Pat: must be a string")
 
         return 
