@@ -31,8 +31,9 @@ def PreparacionTexto(Texto,SignosPuntuacion,StopWords=stop_words,Stemmer=spanish
 #########
 
 def CountingFunction(Text,Pattern):
-    if type(Text) is not list and type(Text) is not np.ndarray and type(Text) is not str and type(Text):
-        print("Bad usage of this function: CountingFunction(Arr,Pat) Arr: must be a list or an array or string, Pat: must be a string")
+    if type(Text) is not list and type(Text) is not np.ndarray and type(Text) is not str and type(Text) is not unicode:
+        print ("Bad usage of this function: CountingFunction(Arr,Pat) Arr: must be a list or an array or string, Pat: must be a string")
+
         return 
     if type(Text) is str:
         MyArray=np.array(StripPunc(Text).split(" "))
@@ -97,6 +98,7 @@ def sumador(Dicc):
     total = {k:np.sum(v) for (k,v) in Dicc.items()}
     return total
 
+
 def contador_stemming(Texto, Diccionarios):
     #Input y output igual a los de la función contador.
     Texto_stem = [spanish_stemmer.stem(word) for word in Texto.split()]
@@ -129,7 +131,12 @@ if __name__ == '__main__':
                     CurrentFreq.append(CountingFunction(i,k))
                 Freqs.append(CurrentFreq)
 
+
         print(Freqs)
+
+ResultadoTexto1Stem = contador_stemming(Texto1.replace("a",Afects['Proyecto de vida'][6]), Afects)
+print('\n Con Stem: \n Texto 1: \n', ResultadoTexto1Stem)
+print('Total: \n', sumador(ResultadoTexto1Stem))
 
 
     Afects=DictsBuild('DiccionariosVersionDic1_2020.csv',Debug=False)
