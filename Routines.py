@@ -22,9 +22,9 @@ spanish_stemmer = SnowballStemmer('spanish')
 def PreparacionTexto(Texto,SignosPuntuacion,StopWords=stop_words,Stemmer=spanish_stemmer):
     StrippedText=StripPunc(Texto)
     tokenized_word=word_tokenize(StrippedText)
-    print tokenized_word
+    print(tokenized_word)
     filtered_words = [i for i in tokenized_word if i not in StopWords]
-    print filtered_words
+    print(filtered_words)
     stemmed_text = [Stemmer.stem(i) for i in filtered_words]
     print(stemmed_text)
 
@@ -32,7 +32,7 @@ def PreparacionTexto(Texto,SignosPuntuacion,StopWords=stop_words,Stemmer=spanish
 
 def CountingFunction(Text,Pattern):
     if type(Text) is not list and type(Text) is not np.ndarray and type(Text) is not str and type(Text) is not unicode:
-        print "Bad usage of this function: CountingFunction(Arr,Pat) Arr: must be a list or an array or string, Pat: must be a string"
+        print ("Bad usage of this function: CountingFunction(Arr,Pat) Arr: must be a list or an array or string, Pat: must be a string")
         return 
     if type(Text) is str or type(Text) is unicode:
         MyArray=np.array(StripPunc(Text).split(" "))
@@ -59,12 +59,12 @@ def DictsBuild(CSVFile,Debug=False):
     Afectaciones = {}
     StringDeUso=u'Sinónimos-Palabras'
     if Debug:
-        print StringDeUso
+        print (StringDeUso)
     for i in ListaDeAfectaciones:
         ListaDeAfects=df[StringDeUso][i].replace(", ", ",").split(",")
         Afectaciones[df['Nodos'][i]] = [x.strip() for x in ListaDeAfects if x]
     if Debug:
-        print Afectaciones
+        print (Afectaciones)
     return Afectaciones
 
 #Contadores de palabras
@@ -97,6 +97,17 @@ def sumador(Dicc):
     total = {k:np.sum(v) for (k,v) in Dicc.items()}
     return total
 
+
+def contador_stemming(Texto, Diccionarios):
+    #Input y output igual a los de la función contador.
+    Texto_stem = [spanish_stemmer.stem(word) for word in Texto.split()]
+    
+    Dicc_stem = {}
+    for i in Diccionarios:
+        Dicc_stem[i] = [spanish_stemmer.stem(expr) for expr in Diccionarios[i]]
+
+    return contador(Texto_stem, Dicc_stem)
+
 #########
 
 if __name__ == '__main__':
@@ -119,7 +130,7 @@ if __name__ == '__main__':
                     CurrentFreq.append(CountingFunction(i,k))
                 Freqs.append(CurrentFreq)
 
-        print Freqs
+        print (Freqs)
 
 
 Afects=DictsBuild('DiccionariosVersionDic1_2020.csv',Debug=False)
@@ -130,3 +141,11 @@ print("Total del conteo texto 1: \n", sumador(ResultadoTexto1),"\n")
 ResultadoTexto2=contador(Texto2.replace("a",Afects['Socioculturales'][4]),Afects)
 print("Conteo del texto 2: \n: ",ResultadoTexto2)
 print("Total del conteo del texto 2: \n",sumador(ResultadoTexto2))
+
+ResultadoTexto1Stem = contador_stemming(Texto1.replace("a",Afects['Proyecto de vida'][6]), Afects)
+print('\n Con Stem: \n Texto 1: \n', ResultadoTexto1Stem)
+print('Total: \n', sumador(ResultadoTexto1Stem))
+
+ResultadoTexto2Stem = contador_stemming(Texto2.replace("a",Afects['Socioculturales'][4]), Afects)
+print('\n Texto 2: \n', ResultadoTexto2Stem)
+print('Total: \n', sumador(ResultadoTexto2Stem))
