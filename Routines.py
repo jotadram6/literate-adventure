@@ -34,7 +34,7 @@ def CountingFunction(Text,Pattern):
     if type(Text) is not list and type(Text) is not np.ndarray and type(Text) is not str and type(Text):
         print("Bad usage of this function: CountingFunction(Arr,Pat) Arr: must be a list or an array or string, Pat: must be a string")
         return 
-    if type(Text) is str or type(Text):
+    if type(Text) is str:
         MyArray=np.array(StripPunc(Text).split(" "))
     if type(Text) is list:
         MyArray=np.array(Text)
@@ -97,6 +97,16 @@ def sumador(Dicc):
     total = {k:np.sum(v) for (k,v) in Dicc.items()}
     return total
 
+def contador_stemming(Texto, Diccionarios):
+    #Input y output igual a los de la función contador.
+    Texto_stem = [spanish_stemmer.stem(word) for word in Texto.split()]
+    
+    Dicc_stem = {}
+    for i in Diccionarios:
+        Dicc_stem[i] = [spanish_stemmer.stem(expr) for expr in Diccionarios[i]]
+
+    return contador(Texto_stem, Dicc_stem)
+
 #########
 
 if __name__ == '__main__':
@@ -130,3 +140,11 @@ if __name__ == '__main__':
     ResultadoTexto2=contador(Texto2.replace("a",Afects['Socioculturales'][4]),Afects)
     print("Conteo del texto 2: \n: ",ResultadoTexto2)
     print("Total del conteo del texto 2: \n",sumador(ResultadoTexto2))
+    
+    ResultadoTexto1Stem = contador_stemming(Texto1.replace("a",Afects['Proyecto de vida'][6]), Afects)
+    print('\n Con Stem: \n Texto 1: \n', ResultadoTexto1Stem)
+    print('Total: \n', sumador(ResultadoTexto1Stem))
+    
+    ResultadoTexto2Stem = contador_stemming(Texto2.replace("a",Afects['Socioculturales'][4]), Afects)
+    print('\n Texto 2: \n', ResultadoTexto2Stem)
+    print('Total: \n', sumador(ResultadoTexto2Stem))
