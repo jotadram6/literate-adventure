@@ -81,6 +81,21 @@ def contador(Texto,Diccionarios,ConStem=False):
         DFResultado[i]=CurrentFreq
     return DFResultado
 
+def ConteoManual(ExlFile,NombreTestimonio,filtradas = True):
+  df_manual = pd.read_excel(ExlFile)
+  dicc = {}
+  dfTemp = df_manual.loc[df_manual['TESTIMONIO'] == NombreTestimonio]
+  for i in dfTemp['AFECTACIÓN']:
+    dicc[i] = dicc.get(i, 0) + 1
+  SortDic = {k: v for k, v in sorted(dicc.items(), key=lambda item: -item[1])}
+  if filtradas:
+    return [k for k,v in SortDic.items() if v>1 and k.lower() in df.index.str.lower()]
+  else:
+    return SortDic
+
+dicc = ConteoManual('ReporteTesteoManual.xlsx','15_TM_HAP (2)',filtradas=True)
+print(dicc)
+
 #Lectura de docx
 
 import docx
