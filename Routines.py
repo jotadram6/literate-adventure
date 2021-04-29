@@ -82,7 +82,7 @@ def contador(Texto,Diccionarios,ConStem=False):
     return DFResultado
 
 def ConteoManual(ExlFile,NombreTestimonio,filtradas = True):
-  df_manual = pd.read_excel(ExlFile)
+  df_manual = pandas.read_excel(ExlFile)
   dicc = {}
   dfTemp = df_manual.loc[df_manual['TESTIMONIO'] == NombreTestimonio]
   for i in dfTemp['AFECTACIÓN']:
@@ -92,9 +92,6 @@ def ConteoManual(ExlFile,NombreTestimonio,filtradas = True):
     return [k for k,v in SortDic.items() if v>1 and k.lower() in df.index.str.lower()]
   else:
     return SortDic
-
-dicc = ConteoManual('ReporteTesteoManual.xlsx','15_TM_HAP (2)',filtradas=True)
-print(dicc)
 
 #Lectura de docx
 
@@ -149,10 +146,6 @@ if __name__ == '__main__':
 
         print(Freqs)
 
-    ResultadoTexto1Stem = contador_stemming(Texto1.replace("a",Afects['Proyecto de vida'][6]), Afects)
-    print('\n Con Stem: \n Texto 1: \n', ResultadoTexto1Stem)
-    print('Total: \n', sumador(ResultadoTexto1Stem))
-
     Afects=DictsBuild('DiccionariosVersionDic1_2020.csv',Debug=False)
     ResultadoTexto1=contador(Texto1.replace("a",Afects['Proyecto de vida'][6]),Afects)
     print("Conteo del texto 1: \n", ResultadoTexto1)
@@ -169,3 +162,6 @@ if __name__ == '__main__':
     ResultadoTexto2Stem = contador_stemming(Texto2.replace("a",Afects['Socioculturales'][4]), Afects)
     print('\n Texto 2: \n', ResultadoTexto2Stem)
     print('Total: \n', sumador(ResultadoTexto2Stem))
+
+    dicc = ConteoManual('ReporteTesteoManual.xlsx','15_TM_HAP (2)',filtradas=True)
+    print(dicc)
