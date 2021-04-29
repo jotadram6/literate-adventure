@@ -1,6 +1,7 @@
 # #Los strings en python 3+ son por defecto unicode. El encabezado uft y los prefijos u son redundantes para el programa. 
 
 import numpy as np
+import pandas as pd
 
 def StripPunc(Text,Sig=[u".",u",",u";",u":",u"!",u"¡",u"-",u"?",u"¿",u'"',u"'",u"(",u")",u"[",u"]"]):
     for i in Sig:
@@ -31,7 +32,7 @@ def PreparacionTexto(Texto,SignosPuntuacion,StopWords=stop_words,Stemmer=spanish
 #########
 
 def CountingFunction(Text,Pattern):
-    if type(Text) is not list and type(Text) is not np.ndarray and type(Text) is not str and type(Text) is not unicode:
+    if type(Text) is not list and type(Text) is not np.ndarray and type(Text) is not str:
         print ("Bad usage of this function: CountingFunction(Arr,Pat) Arr: must be a list or an array or string, Pat: must be a string")
 
         return 
@@ -56,7 +57,7 @@ def DictsBuild(CSVFile,Debug=False):
     #df = pandas.read_csv('DiccionariosVersionDic1_2020.csv')
     df = pandas.read_csv(CSVFile)
 
-    ListaDeAfectaciones = [7,8,9,10,11,13,14,15,16,17,18,19,20]
+    ListaDeAfectaciones = [7,8,9,10,11,12,13,14,15,16,17,18,19,20]
     Afectaciones = {}
     StringDeUso='Sinónimos-Palabras'
     if Debug:
@@ -81,10 +82,13 @@ def contador(Texto,Diccionarios,ConStem=False):
         DFResultado[i]=CurrentFreq
     return DFResultado
 
-def ConteoManual(ExlFile,NombreTestimonio,filtradas = True):
+def ConteoManual(ExlFile,DictFile,NombreTestimonio,filtradas = True):
+  #Input: ExlFile: el archivo de conteo manual. DictFile: El diccionario de afectaciones V2. NombreTestimonio: El nombre del testimonio del que se quieren ver las afectaciones puestas manualmente, filtradas (bool)
+  #Output: filtradas False: Diccionario con cada afectación manual y en value cuántas veces está dicha afectación. filtradas True: una lista ordenada con las afectaciones de mayor a menor  df_manual = pd.read_excel(ExlFile)
   df_manual = pd.read_excel(ExlFile)
-  dicc = {}
   dfTemp = df_manual.loc[df_manual['TESTIMONIO'] == NombreTestimonio]
+  df = pd.read_csv(DictFile,skiprows=list(range(8))+list(range(22,40)),usecols=[1,2,3],names=['AFECTACIONES','Sinónimos-palabras','Expresiones'],index_col='AFECTACIONES')
+  dicc = {}
   for i in dfTemp['AFECTACIÓN']:
     dicc[i] = dicc.get(i, 0) + 1
   SortDic = {k: v for k, v in sorted(dicc.items(), key=lambda item: -item[1])}
@@ -92,9 +96,6 @@ def ConteoManual(ExlFile,NombreTestimonio,filtradas = True):
     return [k for k,v in SortDic.items() if v>1 and k.lower() in df.index.str.lower()]
   else:
     return SortDic
-
-dicc = ConteoManual('ReporteTesteoManual.xlsx','15_TM_HAP (2)',filtradas=True)
-print(dicc)
 
 #Lectura de docx
 
@@ -149,12 +150,7 @@ if __name__ == '__main__':
 
         print(Freqs)
 
-ResultadoTexto1Stem = contador_stemming(Texto1.replace("a",Afects['Proyecto de vida'][6]), Afects)
-print('\n Con Stem: \n Texto 1: \n', ResultadoTexto1Stem)
-print('Total: \n', sumador(ResultadoTexto1Stem))
-
-
-    Afects=DictsBuild('DiccionariosVersionDic1_2020.csv',Debug=False)
+    Afects=DictsBuild('../DiccionariosVersionDic1_2020.csv',Debug=False)
     ResultadoTexto1=contador(Texto1.replace("a",Afects['Proyecto de vida'][6]),Afects)
     print("Conteo del texto 1: \n", ResultadoTexto1)
     print("Total del conteo texto 1: \n", sumador(ResultadoTexto1),"\n")
@@ -165,8 +161,11 @@ print('Total: \n', sumador(ResultadoTexto1Stem))
     
     ResultadoTexto1Stem = contador_stemming(Texto1.replace("a",Afects['Proyecto de vida'][6]), Afects)
     print('\n Con Stem: \n Texto 1: \n', ResultadoTexto1Stem)
-    print('Total: \n', sumador(ResultadoTexto1Stem))
+    print('\n Total: \n', sumador(ResultadoTexto1Stem))
     
     ResultadoTexto2Stem = contador_stemming(Texto2.replace("a",Afects['Socioculturales'][4]), Afects)
     print('\n Texto 2: \n', ResultadoTexto2Stem)
-    print('Total: \n', sumador(ResultadoTexto2Stem))
+    print('\n Total: \n', sumador(ResultadoTexto2Stem))
+
+    dicc = ConteoManual('../ReporteTesteoManual.xlsx','../Diccionario_V2 - Diccionario_V2.csv','15_TM_HAP (2)',filtradas=True)
+    print('\n Conteo manual filtrado: \n',dicc)
