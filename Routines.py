@@ -149,10 +149,9 @@ if __name__ == '__main__':
 
         print(Freqs)
 
-ResultadoTexto1Stem = contador_stemming(Texto1.replace("a",Afects['Proyecto de vida'][6]), Afects)
-print('\n Con Stem: \n Texto 1: \n', ResultadoTexto1Stem)
-print('Total: \n', sumador(ResultadoTexto1Stem))
-
+    ResultadoTexto1Stem = contador_stemming(Texto1.replace("a",Afects['Proyecto de vida'][6]), Afects)
+    print('\n Con Stem: \n Texto 1: \n', ResultadoTexto1Stem)
+    print('Total: \n', sumador(ResultadoTexto1Stem))
 
     Afects=DictsBuild('DiccionariosVersionDic1_2020.csv',Debug=False)
     ResultadoTexto1=contador(Texto1.replace("a",Afects['Proyecto de vida'][6]),Afects)
