@@ -93,7 +93,7 @@ def ConteoManual(ExlFile,DictFile,NombreTestimonio,filtradas = True):
     dicc[i] = dicc.get(i, 0) + 1
   SortDic = {k: v for k, v in sorted(dicc.items(), key=lambda item: -item[1])}
   if filtradas:
-    return [k for k,v in SortDic.items() if v>1 and k.lower() in df.index.str.lower()]
+    return {k:v for k,v in SortDic.items() if v>1 and k.lower() in df.index.str.lower()}
   else:
     return SortDic
 
