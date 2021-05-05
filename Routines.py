@@ -7,6 +7,13 @@ def StripPunc(Text,Sig=[u".",u",",u";",u":",u"!",u"¡",u"-",u"?",u"¿",u'"',u"'"
         Text=Text.replace(i,u"")
     return Text
 
+def normalize(mystr):
+    if type(mystr) is list:
+        NewList=[normalize(i) for i in mystr]
+        return NewList
+    if type(mystr) is str:
+        return mystr.lower().replace("á", "a").replace("é", "e").replace("í", "i").replace("ó", "o").replace("ú", "u")
+
 #NLTK utilities
 
 import nltk
@@ -63,7 +70,7 @@ def DictsBuild(CSVFile,Debug=False):
         print(StringDeUso)
     for i in ListaDeAfectaciones:
         ListaDeAfects=df[StringDeUso][i].replace(", ", ",").split(",")
-        Afectaciones[df['Nodos'][i]] = [x.strip() for x in ListaDeAfects if x]
+        Afectaciones[normalize(df['Nodos'][i])] = [x.strip() for x in ListaDeAfects if x]
     if Debug:
         print(Afectaciones)
     return Afectaciones
@@ -81,15 +88,21 @@ def contador(Texto,Diccionarios,ConStem=False):
         DFResultado[i]=CurrentFreq
     return DFResultado
 
-def ConteoManual(ExlFile,NombreTestimonio,filtradas = True):
+def ConteoManual(ExlFile,DictFile,NombreTestimonio,filtradas = True):
   df_manual = pandas.read_excel(ExlFile)
   dicc = {}
   dfTemp = df_manual.loc[df_manual['TESTIMONIO'] == NombreTestimonio]
+  df = pandas.read_csv(DictFile,skiprows=list(range(8))+list(range(22,40)),usecols=[1,2,3],names=['AFECTACIONES','Sinónimos-palabras','Expresiones'],index_col='AFECTACIONES')
+  #print(df) 
+  #print(df.index.str.lower())
   for i in dfTemp['AFECTACIÓN']:
-    dicc[i] = dicc.get(i, 0) + 1
+    j=normalize(i)
+    dicc[j] = dicc.get(j, 0) + 1
+  #print(dicc)
   SortDic = {k: v for k, v in sorted(dicc.items(), key=lambda item: -item[1])}
+  #print(SortDic)
   if filtradas:
-    return [k for k,v in SortDic.items() if v>1 and k.lower() in df.index.str.lower()]
+    return {k:v for k,v in SortDic.items() if v>0 and k in normalize(df.index.str.lower().to_list())}
   else:
     return SortDic
 
