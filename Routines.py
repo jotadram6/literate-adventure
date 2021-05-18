@@ -1,7 +1,6 @@
 # #Los strings en python 3+ son por defecto unicode. El encabezado uft y los prefijos u son redundantes para el programa. 
 
 import numpy as np
-import pandas as pd
 
 def StripPunc(Text,Sig=[u".",u",",u";",u":",u"!",u"¡",u"-",u"?",u"¿",u'"',u"'",u"(",u")",u"[",u"]"]):
     for i in Sig:
@@ -90,21 +89,12 @@ def contador(Texto,Diccionarios,ConStem=False):
     return DFResultado
 
 def ConteoManual(ExlFile,DictFile,NombreTestimonio,filtradas = True):
-<<<<<<< HEAD
-  #Input: ExlFile: el archivo de conteo manual. DictFile: El diccionario de afectaciones V2. NombreTestimonio: El nombre del testimonio del que se quieren ver las afectaciones puestas manualmente, filtradas (bool)
-  #Output: filtradas False: Diccionario con cada afectación manual y en value cuántas veces está dicha afectación. filtradas True: una lista ordenada con las afectaciones de mayor a menor  df_manual = pd.read_excel(ExlFile)
-  df_manual = pd.read_excel(ExlFile)
-  dfTemp = df_manual.loc[df_manual['TESTIMONIO'] == NombreTestimonio]
-  df = pd.read_csv(DictFile,skiprows=list(range(8))+list(range(22,40)),usecols=[1,2,3],names=['AFECTACIONES','Sinónimos-palabras','Expresiones'],index_col='AFECTACIONES')
-  dicc = {}
-=======
   df_manual = pandas.read_excel(ExlFile)
   dicc = {}
   dfTemp = df_manual.loc[df_manual['TESTIMONIO'] == NombreTestimonio]
   df = pandas.read_csv(DictFile,skiprows=list(range(8))+list(range(22,40)),usecols=[1,2,3],names=['AFECTACIONES','Sinónimos-palabras','Expresiones'],index_col='AFECTACIONES')
   #print(df) 
   #print(df.index.str.lower())
->>>>>>> upstream/main
   for i in dfTemp['AFECTACIÓN']:
     j=normalize(i)
     dicc[j] = dicc.get(j, 0) + 1
@@ -112,11 +102,7 @@ def ConteoManual(ExlFile,DictFile,NombreTestimonio,filtradas = True):
   SortDic = {k: v for k, v in sorted(dicc.items(), key=lambda item: -item[1])}
   #print(SortDic)
   if filtradas:
-<<<<<<< HEAD
-    return {k:v for k,v in SortDic.items() if v>1 and k.lower() in df.index.str.lower()}
-=======
     return {k:v for k,v in SortDic.items() if v>0 and k in normalize(df.index.str.lower().to_list())}
->>>>>>> upstream/main
   else:
     return SortDic
 
@@ -173,11 +159,7 @@ if __name__ == '__main__':
 
         print(Freqs)
 
-<<<<<<< HEAD
-    Afects=DictsBuild('../DiccionariosVersionDic1_2020.csv',Debug=False)
-=======
     Afects=DictsBuild('DiccionariosVersionDic1_2020.csv',Debug=False)
->>>>>>> upstream/main
     ResultadoTexto1=contador(Texto1.replace("a",Afects['Proyecto de vida'][6]),Afects)
     print("Conteo del texto 1: \n", ResultadoTexto1)
     print("Total del conteo texto 1: \n", sumador(ResultadoTexto1),"\n")
@@ -188,18 +170,11 @@ if __name__ == '__main__':
     
     ResultadoTexto1Stem = contador_stemming(Texto1.replace("a",Afects['Proyecto de vida'][6]), Afects)
     print('\n Con Stem: \n Texto 1: \n', ResultadoTexto1Stem)
-    print('\n Total: \n', sumador(ResultadoTexto1Stem))
+    print('Total: \n', sumador(ResultadoTexto1Stem))
     
     ResultadoTexto2Stem = contador_stemming(Texto2.replace("a",Afects['Socioculturales'][4]), Afects)
     print('\n Texto 2: \n', ResultadoTexto2Stem)
-<<<<<<< HEAD
-    print('\n Total: \n', sumador(ResultadoTexto2Stem))
-
-    dicc = ConteoManual('../ReporteTesteoManual.xlsx','../Diccionario_V2 - Diccionario_V2.csv','15_TM_HAP (2)',filtradas=True)
-    print('\n Conteo manual filtrado: \n',dicc)
-=======
     print('Total: \n', sumador(ResultadoTexto2Stem))
 
     dicc = ConteoManual('ReporteTesteoManual.xlsx','15_TM_HAP (2)',filtradas=True)
     print(dicc)
->>>>>>> upstream/main
