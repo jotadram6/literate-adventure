@@ -134,6 +134,8 @@ def contador_stemming(Texto, Diccionarios):
 
     return contador(Texto_stem, Dicc_stem)
 
+    
+
 #########
 
 if __name__ == '__main__':
@@ -160,21 +162,22 @@ if __name__ == '__main__':
         print(Freqs)
 
     Afects=DictsBuild('DiccionariosVersionDic1_2020.csv',Debug=False)
-    ResultadoTexto1=contador(Texto1.replace("a",Afects['Proyecto de vida'][6]),Afects)
+    print(Afects)
+    ResultadoTexto1=contador(Texto1.replace("a",Afects['proyecto de vida'][6]),Afects)
     print("Conteo del texto 1: \n", ResultadoTexto1)
     print("Total del conteo texto 1: \n", sumador(ResultadoTexto1),"\n")
 
-    ResultadoTexto2=contador(Texto2.replace("a",Afects['Socioculturales'][4]),Afects)
+    ResultadoTexto2=contador(Texto2.replace("a",Afects['socioculturales'][4]),Afects)
     print("Conteo del texto 2: \n: ",ResultadoTexto2)
     print("Total del conteo del texto 2: \n",sumador(ResultadoTexto2))
     
-    ResultadoTexto1Stem = contador_stemming(Texto1.replace("a",Afects['Proyecto de vida'][6]), Afects)
+    ResultadoTexto1Stem = contador_stemming(Texto1.replace("a",Afects['proyecto de vida'][6]), Afects)
     print('\n Con Stem: \n Texto 1: \n', ResultadoTexto1Stem)
     print('Total: \n', sumador(ResultadoTexto1Stem))
     
-    ResultadoTexto2Stem = contador_stemming(Texto2.replace("a",Afects['Socioculturales'][4]), Afects)
+    ResultadoTexto2Stem = contador_stemming(Texto2.replace("a",Afects['socioculturales'][4]), Afects)
     print('\n Texto 2: \n', ResultadoTexto2Stem)
     print('Total: \n', sumador(ResultadoTexto2Stem))
 
-    dicc = ConteoManual('ReporteTesteoManual.xlsx','15_TM_HAP (2)',filtradas=True)
+    dicc = ConteoManual('../ReporteTesteoManual.xlsx','DiccionariosVersionDic1_2020.csv','15_TM_HAP (2)',filtradas=True)
     print(dicc)
